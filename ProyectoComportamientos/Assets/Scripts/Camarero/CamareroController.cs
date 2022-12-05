@@ -8,8 +8,9 @@ public class CamareroController : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     [SerializeField] public WorldController worldController;
     public Bebida bebida;
+    public int index;
 
-    [SerializeField] public GameObject barPos;
+    [SerializeField] public Vector3 barPos;
 
     public int state;
     public Vector3 initPos;
@@ -46,7 +47,7 @@ public class CamareroController : MonoBehaviour
             case 3:
                 //Cogiendo comanda al cliente
                 state = 4;
-                destination = barPos.transform.position; //destino del bar
+                destination = barPos; //destino del bar
                 navMeshAgent.destination = destination;
                 break;
             case 4:

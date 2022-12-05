@@ -22,6 +22,7 @@ public class WorldController : MonoBehaviour
 
 
     [SerializeField] public GameObject puertaPos;
+    public bool musicaSonando;
 
     public void addCLient()
     {
@@ -45,7 +46,8 @@ public class WorldController : MonoBehaviour
         GameObject obj = Instantiate(prefabCamarero, new Vector3(parentCamarero.transform.position.x, parentCamarero.transform.position.y, parentCamarero.transform.position.z - 2 * listaCamareros.Count), parentCamarero.transform.rotation);
         obj.transform.SetParent(parentCamarero.transform);
         obj.GetComponent<CamareroController>().worldController = this;
-        obj.GetComponent<CamareroController>().barPos = barPos;
+        obj.GetComponent<CamareroController>().index = listaCamareros.Count;
+        obj.GetComponent<CamareroController>().barPos = new Vector3 ((barPos.transform.position.x + listaCamareros.Count), barPos.transform.position.y, barPos.transform.position.z);
         listaCamareros.Add(obj.GetComponent<CamareroController>());
     }
     public void removeCamarero()

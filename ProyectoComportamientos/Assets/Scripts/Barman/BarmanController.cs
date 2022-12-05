@@ -57,7 +57,7 @@ public class BarmanController : MonoBehaviour
                 if (camarero != null)
                 {
                     camarero.state = 7;
-                    camarero.navMeshAgent.destination = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+8);
+                    camarero.navMeshAgent.destination = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+7);
                     camarero.bebida = bebida;
                     state = 4;
                 }
