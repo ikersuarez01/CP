@@ -138,6 +138,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   state: 0
   worldController: {fileID: 0}
+  bocadillo1: {fileID: 6084234580111468511, guid: 78f975041f1b4e14c944a16a95e2a116, type: 3}
   initRot: {x: 0, y: 0, z: 0}
   destinationRot: {x: 0, y: 0, z: 0}
   bebida: {fileID: 0}

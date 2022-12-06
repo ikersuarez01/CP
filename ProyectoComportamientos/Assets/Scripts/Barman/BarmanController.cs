@@ -9,6 +9,7 @@ public class BarmanController : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public int state;
     [SerializeField] public WorldController worldController;
+    [SerializeField] public GameObject bocadillo1;
 
     public Vector3 initRot;
     public Vector3 destinationRot;
@@ -52,6 +53,12 @@ public class BarmanController : MonoBehaviour
                 }
                 break;
             case 3:
+                //bocadillo bebida preparada
+                Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), this.transform.rotation);
+                state = 4;
+                break;
+                                
+            case 4:
                 //Espera camarero para entregar bebida
                 CamareroController camarero = worldController.camareroLibre();
                 if (camarero != null)
@@ -59,10 +66,10 @@ public class BarmanController : MonoBehaviour
                     camarero.state = 7;
                     camarero.navMeshAgent.destination = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+7);
                     camarero.bebida = bebida;
-                    state = 4;
+                    state = 5;
                 }
                 break;
-            case 4:
+            case 5:
                 //Espera hasta que el camarero llegue para entregarle la bebida
                 break;
         }
