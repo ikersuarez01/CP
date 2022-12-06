@@ -129,4 +129,25 @@ public class WorldController : MonoBehaviour
     {
         listaBebidasEnEspera.Add(bebida);
     }
+
+    public void Start()
+    {
+        FindObjectOfType<AudioManager>().Play("Musica");
+        musicaSonando = true;
+    }
+
+    public void changeMusic()
+    {
+        if (musicaSonando)
+        {
+            //parar musica
+            musicaSonando = false;
+            FindObjectOfType<AudioManager>().Stop("Musica");
+        }
+        else
+        {
+            FindObjectOfType<AudioManager>().Play("Musica");
+            musicaSonando = true;
+        }
+    }
 }

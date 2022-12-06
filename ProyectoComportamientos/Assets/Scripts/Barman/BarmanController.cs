@@ -10,6 +10,8 @@ public class BarmanController : MonoBehaviour
     public int state;
     [SerializeField] public WorldController worldController;
     [SerializeField] public GameObject bocadillo1;
+    GameObject bocAux = null;
+    private bool objectSpawned = false;
 
     public Vector3 initRot;
     public Vector3 destinationRot;
@@ -50,11 +52,17 @@ public class BarmanController : MonoBehaviour
                     //giro hacia el bar
                     timer = 0;
                     state = 3;
+
                 }
                 break;
             case 3:
                 //bocadillo bebida preparada
-                Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), this.transform.rotation);
+                FindObjectOfType<AudioManager>().Play("Campanita");
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
                 state = 4;
                 break;
                                 
@@ -71,6 +79,13 @@ public class BarmanController : MonoBehaviour
                 break;
             case 5:
                 //Espera hasta que el camarero llegue para entregarle la bebida
+                if (objectSpawned && bocAux != null)
+                {
+                    Destroy(bocAux.transform.GetChild(0).gameObject);
+                    Destroy(bocAux.gameObject);
+                    objectSpawned = false;
+
+                }
                 break;
         }
     }

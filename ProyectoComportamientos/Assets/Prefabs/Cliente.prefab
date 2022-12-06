@@ -137,6 +137,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navMeshAgent: {fileID: 0}
   worldController: {fileID: 0}
+  bocadilloEsperando: {fileID: 6084234580111468511, guid: affe4e32f568a9b49ab63fa391d013b9, type: 3}
+  bocadilloBebiendo: {fileID: 6084234580111468511, guid: bd1128203190d774eb57debe76cbb65e, type: 3}
   state: 0
   destination: {x: 0, y: 0, z: 0}
   initPos: {x: 0, y: 0, z: 0}
