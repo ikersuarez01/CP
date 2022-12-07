@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1309843179800610025}
   - component: {fileID: 1309843179800610024}
   - component: {fileID: 1309843179800610023}
-  - component: {fileID: 2941829389535740711}
+  - component: {fileID: -1942563269876372494}
   m_Layer: 0
   m_Name: Bailarina
   m_TagString: Untagged
@@ -122,7 +122,7 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2941829389535740711
+--- !u!114 &-1942563269876372494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,6 +131,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1309843179800610021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ad400ca69efafe45a9cfcc9a11db7f6, type: 3}
+  m_Script: {fileID: 11500000, guid: e4f119c672dbc254eb339c9fc83a5898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fish: {fileID: 0}
+  boot: {fileID: 0}
+  rodPoint: {fileID: 0}
+  toWaterPoint: {fileID: 0}
+  toBasketPoint: {fileID: 0}

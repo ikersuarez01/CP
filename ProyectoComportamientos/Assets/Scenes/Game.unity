@@ -1301,7 +1301,7 @@ MonoBehaviour:
   parentCliente: {fileID: 2064546276}
   barPos: {fileID: 1260666775}
   puertaPos: {fileID: 1605184964}
-  musicaSonando: 0
+  musicaSonando: 1
 --- !u!4 &547265345
 Transform:
   m_ObjectHideFlags: 0
@@ -3976,6 +3976,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8773470489711585610, guid: ed59357d21ffa60478d581c2fc5d0fc8, type: 3}
+      propertyPath: worldController
+      value: 
+      objectReference: {fileID: 547265344}
+    - target: {fileID: -1942563269876372494, guid: ed59357d21ffa60478d581c2fc5d0fc8, type: 3}
+      propertyPath: worldController
+      value: 
+      objectReference: {fileID: 547265344}
     - target: {fileID: 1309843179800610021, guid: ed59357d21ffa60478d581c2fc5d0fc8, type: 3}
       propertyPath: m_Name
       value: Bailarina

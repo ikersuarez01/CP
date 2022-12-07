@@ -129,4 +129,22 @@ public class WorldController : MonoBehaviour
     {
         listaBebidasEnEspera.Add(bebida);
     }
+    public ClienteController clienteLibre()
+    {
+        if (listaClientes.Count == 0)
+        {
+            return null;
+        }
+        ClienteController c = null;
+        int num = Random.Range(0, listaClientes.Count);
+        c = listaClientes[num];
+        if(c.state == 0 || c.state == 1)
+        {
+            return null;
+        }
+        else
+        {
+            return c;
+        }
+    }
 }
