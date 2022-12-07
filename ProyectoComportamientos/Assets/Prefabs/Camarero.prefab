@@ -138,7 +138,9 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   worldController: {fileID: 0}
   bebida: {fileID: 0}
-  barPos: {fileID: 0}
+  index: 0
+  bocadilloPregunta: {fileID: 6084234580111468511, guid: ec362bbd11e9c8f41a961bf20f4e9f77, type: 3}
+  barPos: {x: 0, y: 0, z: 0}
   state: 0
   initPos: {x: 0, y: 0, z: 0}
   destination: {x: 0, y: 0, z: 0}

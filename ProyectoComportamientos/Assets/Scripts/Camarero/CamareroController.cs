@@ -10,6 +10,11 @@ public class CamareroController : MonoBehaviour
     public Bebida bebida;
     public int index;
 
+    [SerializeField] public GameObject bocadilloPregunta;
+
+    private bool objectSpawned = false;
+    GameObject bocAux = null;
+
     [SerializeField] public Vector3 barPos;
 
     public int state;
@@ -41,7 +46,13 @@ public class CamareroController : MonoBehaviour
                 //navMeshAgent.destination = destination;
                 if (comprobatePos())
                 {
-                   state = 3;
+                    if (!objectSpawned)
+                    {
+                        bocAux = Instantiate(bocadilloPregunta, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        objectSpawned = true;
+                    }
+
+                    StartCoroutine(WaitSeconds());
                 }
                 break;
             case 3:
@@ -104,6 +115,17 @@ public class CamareroController : MonoBehaviour
     private bool comprobatePos()
     {
         return (navMeshAgent.remainingDistance == 0);
+    }
+    IEnumerator WaitSeconds()
+    {
+        yield return new WaitForSeconds(3);
+        if (objectSpawned && bocAux != null)
+        {
+            Destroy(bocAux.transform.GetChild(0).gameObject);
+            Destroy(bocAux.gameObject);
+            objectSpawned = false;
+        }
+        state = 3;
     }
 }
 
