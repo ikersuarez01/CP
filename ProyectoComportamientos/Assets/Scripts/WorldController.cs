@@ -138,14 +138,15 @@ public class WorldController : MonoBehaviour
         ClienteController c = null;
         int num = Random.Range(0, listaClientes.Count);
         c = listaClientes[num];
-        if(c.state == 0 || c.state == 1)
+        if (c.state == 0 || c.state == 1)
         {
             return null;
         }
         else
         {
             return c;
-
+        }
+    }
     public void Start()
     {
         FindObjectOfType<AudioManager>().Play("Musica");

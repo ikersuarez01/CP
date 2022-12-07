@@ -126,7 +126,7 @@ public class ClienteController : MonoBehaviour
         {
             return true;
         }
-
+    }
     IEnumerator WaitSeconds()
     {
         yield return new WaitForSeconds(5);
@@ -138,4 +138,5 @@ public class ClienteController : MonoBehaviour
         }
         state = 5;
     }
+    
 }
