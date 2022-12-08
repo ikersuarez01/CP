@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class BarmanController : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
-    public int state;
+    public int state = 0;
     [SerializeField] public WorldController worldController;
     [SerializeField] public GameObject bocadillo1;
     GameObject bocAux = null;
@@ -19,7 +19,6 @@ public class BarmanController : MonoBehaviour
     public Bebida bebida;
     void Start()
     {
-        state = 0;
         navMeshAgent = GetComponent<NavMeshAgent>();
         initRot = transform.position;
         destinationRot = new Vector3(initRot.x, initRot.y + 180, initRot.z);
@@ -67,7 +66,7 @@ public class BarmanController : MonoBehaviour
                 break;
                                 
             case 4:
-                //Espera camarero para entregar bebida
+                //Espera camarero libre
                 CamareroController camarero = worldController.camareroLibre();
                 if (camarero != null)
                 {
@@ -78,13 +77,16 @@ public class BarmanController : MonoBehaviour
                 }
                 break;
             case 5:
-                //Espera hasta que el camarero llegue para entregarle la bebida
+                //Espera a que el camarero llegue
+                break;
+            case 6:
+                //El camarero llega
                 if (objectSpawned && bocAux != null)
                 {
                     Destroy(bocAux.transform.GetChild(0).gameObject);
                     Destroy(bocAux.gameObject);
                     objectSpawned = false;
-
+                    state = 0;
                 }
                 break;
         }

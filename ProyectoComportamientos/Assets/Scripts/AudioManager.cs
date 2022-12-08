@@ -21,7 +21,6 @@ public class AudioManager : MonoBehaviour
     {
         volumeValue = 0.5f;
         musicValue = 0.5f;
-        Debug.LogWarning("Awake");
         if (instance == null)
             instance = this;
         else
@@ -49,8 +48,7 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-
-        Debug.LogWarning("Start del audiomanager");
+        
 
     }
 
@@ -59,7 +57,6 @@ public class AudioManager : MonoBehaviour
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)
         {
-            Debug.LogWarning("Sound: " + name + " not found! MIREN EL NOMBRE O ALGO BRO");
             return;
         }
         s.source.Play();
@@ -69,7 +66,6 @@ public class AudioManager : MonoBehaviour
         Sound s = Array.Find(sounds, sound => sound.name == name);
         if (s == null)
         {
-            Debug.LogWarning("Sound: " + name + " not found! MIREN EL NOMBRE O ALGO BRO");
             return;
         }
         s.source.Stop();
@@ -77,19 +73,15 @@ public class AudioManager : MonoBehaviour
 
     public void changeVolumeSFX(float vol)
     {
-        Debug.LogWarning("0000");
         if (vol >= 0 && vol <= 1)
         {
-            Debug.LogWarning("11111");
             foreach (Sound s in sounds)
             {
                 if (!s.musica)
                 {
                     s.source.volume = s.porcentaje * vol;
-                    Debug.LogWarning("Sound: " + s.name + " vol: " + s.source.volume);
                 }
-                else
-                    Debug.LogWarning("no tiene sonidos");
+                
             }
             setVolumeValue(vol);
         }

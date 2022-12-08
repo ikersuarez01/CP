@@ -17,14 +17,14 @@ public class CamareroController : MonoBehaviour
 
     [SerializeField] public Vector3 barPos;
 
-    public int state;
+    public int state = 0;
     public Vector3 initPos;
     public Vector3 destination;
 
+    public bool oneTime = false;
     
     private void Start()
     {
-        state = 0;
         navMeshAgent = GetComponent<NavMeshAgent>();
         initPos = this.transform.position;
         bebida = GetComponent<Bebida>();
@@ -51,13 +51,17 @@ public class CamareroController : MonoBehaviour
                         bocAux = Instantiate(bocadilloPregunta, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
                         objectSpawned = true;
                     }
-
-                    StartCoroutine(WaitSeconds());
+                    if (!oneTime)
+                    {
+                        oneTime = true;
+                        StartCoroutine(WaitSeconds());
+                    }
                 }
                 break;
             case 3:
                 //Cogiendo comanda al cliente
                 state = 4;
+                oneTime = false;
                 destination = barPos; //destino del bar
                 navMeshAgent.destination = destination;
                 break;
@@ -90,7 +94,7 @@ public class CamareroController : MonoBehaviour
                 break;
             case 8:
                 //Cogiendo comanda al barman
-                bebida.barman.state = 0;
+                bebida.barman.state = 6;
                 state = 9;
                 navMeshAgent.destination = bebida.posicionCliente;
                 break;

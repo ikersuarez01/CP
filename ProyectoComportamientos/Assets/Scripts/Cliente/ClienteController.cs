@@ -12,7 +12,7 @@ public class ClienteController : MonoBehaviour
 
 
 
-    public int state;
+    public int state = 0;
     public Vector3 destination;
     public Vector3 initPos;
     public Mesa mesa;
@@ -21,11 +21,13 @@ public class ClienteController : MonoBehaviour
     private bool objectSpawned = false;
     GameObject bocAux = null;
 
+    private bool mesaLibreFirstTime = true;
+
+    private bool oneTime = false;
     private void Start()
     {
-        state = 0;
         navMeshAgent = GetComponent<NavMeshAgent>();
-        initPos = transform.position;
+        initPos = new Vector3(transform.position.x-3, transform.position.y, transform.position.z);
         bebida = GetComponent<Bebida>();
 
     }
@@ -79,7 +81,6 @@ public class ClienteController : MonoBehaviour
                             Destroy(bocAux.gameObject);
                             objectSpawned = false;
                         }
-                            
                         state = 3;
                     }
                     break;
@@ -94,11 +95,20 @@ public class ClienteController : MonoBehaviour
                         bocAux = Instantiate(bocadilloBebiendo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
                         objectSpawned = true;
                     }
-                    StartCoroutine(WaitSeconds());
+                    if (!oneTime)
+                    {
+                        oneTime = true;
+                        StartCoroutine(WaitSeconds());
+                    }
                     break;
                 case 5:
-                    mesa.ocupado = false;
+                    oneTime = false;
                     navMeshAgent.destination = initPos; // solo si se va del bar
+                    if (mesaLibreFirstTime)
+                    {
+                        mesaLibreFirstTime = false;
+                        mesa.ocupado = false;
+                    }
                     state = 6;
                     break;
                 case 6:

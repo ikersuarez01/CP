@@ -61,7 +61,7 @@ public class WorldController : MonoBehaviour
     }
     public void addBarman()
     {
-        GameObject obj = Instantiate(prefabBarman, new Vector3(parentBarman.transform.position.x+1*listaBarman.Count, parentBarman.transform.position.y, parentBarman.transform.position.z), parentBarman.transform.rotation);
+        GameObject obj = Instantiate(prefabBarman, new Vector3(parentBarman.transform.position.x+2*listaBarman.Count, parentBarman.transform.position.y, parentBarman.transform.position.z), parentBarman.transform.rotation);
         obj.transform.SetParent(parentBarman.transform);
         obj.GetComponent<BarmanController>().worldController = this;
         listaBarman.Add(obj.GetComponent<BarmanController>());
@@ -80,7 +80,6 @@ public class WorldController : MonoBehaviour
         listaClientes.Remove(obj);
         Destroy(obj.gameObject);
     }
-
     public Mesa mesaLibre()
     {
         for (int i = 0; i < listaMesas.Count; i++)
@@ -95,9 +94,9 @@ public class WorldController : MonoBehaviour
     }
     public CamareroController camareroLibre()
     {
-        for(int i = 0; i < listaCamareros.Count; i++)
+        for (int i = 0; i < listaCamareros.Count; i++)
         {
-            if(listaCamareros[i].state == 0 || listaCamareros[i].state == 6)
+            if (listaCamareros[i].state == 0 || listaCamareros[i].state == 6)
             {
                 return listaCamareros[i];
             }
