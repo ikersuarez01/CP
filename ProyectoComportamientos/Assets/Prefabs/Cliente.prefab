@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 1309843179800610021}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3445685, y: 1.438, z: 0.23069}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -111,10 +111,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 10
-  m_Acceleration: 10
+  m_Speed: 7
+  m_Acceleration: 7
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -144,8 +144,10 @@ MonoBehaviour:
   state: 0
   destination: {x: 0, y: 0, z: 0}
   initPos: {x: 0, y: 0, z: 0}
+  puertaPos: {x: 0, y: 0, z: 0}
   mesa: {fileID: 0}
   bebida: {fileID: 0}
+  tipoBebida: 0
   pausaBailarina: 0
 --- !u!114 &7525180750148499405
 MonoBehaviour:
@@ -160,5 +162,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   posicionCliente: {x: 0, y: 0, z: 0}
+  tipo: 0
+  modeloBebidas:
+  - {fileID: 2745807548138655187, guid: 3a2efb942a0b21b40b7d17f7734b297e, type: 3}
+  - {fileID: 2745807548138655187, guid: a908c076b93132547a5602a5a63bdc97, type: 3}
+  - {fileID: 2745807548138655187, guid: 9f4d0a14778030a4ba2da116a85844d6, type: 3}
+  - {fileID: 2745807548138655187, guid: d56d6dbe23b2c5d4b89d2dba052b451b, type: 3}
   barman: {fileID: 0}
   cliente: {fileID: 0}

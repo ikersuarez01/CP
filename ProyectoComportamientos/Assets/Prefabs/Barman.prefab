@@ -31,8 +31,8 @@ Transform:
   m_GameObject: {fileID: 1309843179800610021}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3445685, y: 1.438, z: 0.23069}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -142,6 +142,7 @@ MonoBehaviour:
   initRot: {x: 0, y: 0, z: 0}
   destinationRot: {x: 0, y: 0, z: 0}
   bebida: {fileID: 0}
+  modeloBebida: {fileID: 0}
 --- !u!114 &-4050886110574613398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,5 +156,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   posicionCliente: {x: 0, y: 0, z: 0}
+  tipo: 0
+  modeloBebidas:
+  - {fileID: 2745807548138655187, guid: 3a2efb942a0b21b40b7d17f7734b297e, type: 3}
+  - {fileID: 2745807548138655187, guid: a908c076b93132547a5602a5a63bdc97, type: 3}
+  - {fileID: 2745807548138655187, guid: 9f4d0a14778030a4ba2da116a85844d6, type: 3}
+  - {fileID: 2745807548138655187, guid: d56d6dbe23b2c5d4b89d2dba052b451b, type: 3}
   barman: {fileID: 0}
   cliente: {fileID: 0}

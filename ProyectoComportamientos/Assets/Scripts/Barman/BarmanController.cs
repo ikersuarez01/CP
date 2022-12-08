@@ -17,6 +17,7 @@ public class BarmanController : MonoBehaviour
     public Vector3 destinationRot;
 
     public Bebida bebida;
+    public GameObject modeloBebida;
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -62,6 +63,7 @@ public class BarmanController : MonoBehaviour
                     bocAux = Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
+                modeloBebida = Instantiate(bebida.modeloBebidas[bebida.tipo], new Vector3(this.transform.position.x, this.transform.position.y+1.6f, this.transform.position.z-1.5f), Quaternion.identity);
                 state = 4;
                 break;
                                 
@@ -71,7 +73,7 @@ public class BarmanController : MonoBehaviour
                 if (camarero != null)
                 {
                     camarero.state = 7;
-                    camarero.navMeshAgent.destination = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z+7);
+                    camarero.navMeshAgent.destination = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z-2.5f);
                     camarero.bebida = bebida;
                     state = 5;
                 }
@@ -86,8 +88,13 @@ public class BarmanController : MonoBehaviour
                     Destroy(bocAux.transform.GetChild(0).gameObject);
                     Destroy(bocAux.gameObject);
                     objectSpawned = false;
-                    state = 0;
                 }
+                for (var i = modeloBebida.transform.childCount - 1; i >= 0; i--)
+                {
+                    Object.Destroy(modeloBebida.transform.GetChild(i).gameObject);
+                }
+                Destroy(modeloBebida);
+                state = 0;
                 //Espera hasta que el camarero llegue para entregarle la bebida
                 BorrarBocadillos();
                 break;

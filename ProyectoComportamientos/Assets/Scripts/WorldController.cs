@@ -26,13 +26,43 @@ public class WorldController : MonoBehaviour
     [SerializeField] public GameObject puertaPos;
     public bool musicaSonando;
     public int cAux = -1;
+    public float time;
+    public float t=0f;
+    public void Start()
+    {
+        time = 0f;
+        FindObjectOfType<AudioManager>().Play("Musica");
+        musicaSonando = true;
+    }
+
+    private void Update()
+    {
+        if (time != 0)
+        {
+            t += Time.deltaTime / time;
+
+            if (t >= 1f)
+            {
+                t = 0;
+                addCLient();
+            }
+        }
+    }
 
     public void addCLient()
     {
-        GameObject obj = Instantiate(prefabCliente, puertaPos.transform.position, puertaPos.transform.rotation);
+        GameObject obj = Instantiate(prefabCliente, parentCliente.transform.position, parentCliente.transform.rotation);
         obj.transform.SetParent(parentCliente.transform);
+        obj.GetComponent<ClienteController>().puertaPos = puertaPos.transform.position;
         obj.GetComponent<ClienteController>().worldController = this;
         listaClientes.Add(obj.GetComponent<ClienteController>());
+    }
+    public void removeConcreteClient(ClienteController aux)
+    {
+        GameObject obj = aux.gameObject;
+        listaClientes.Remove(aux);
+        aux.BorrarBocadillos();
+        Destroy(obj);
     }
     public void removeCLient()
     {
@@ -47,11 +77,11 @@ public class WorldController : MonoBehaviour
 
     public void addCamarero()
     {
-        GameObject obj = Instantiate(prefabCamarero, new Vector3(parentCamarero.transform.position.x, parentCamarero.transform.position.y, parentCamarero.transform.position.z - 2 * listaCamareros.Count), parentCamarero.transform.rotation);
+        GameObject obj = Instantiate(prefabCamarero, new Vector3(parentCamarero.transform.position.x + 1 * listaCamareros.Count, parentCamarero.transform.position.y, parentCamarero.transform.position.z), parentCamarero.transform.rotation);
         obj.transform.SetParent(parentCamarero.transform);
         obj.GetComponent<CamareroController>().worldController = this;
         obj.GetComponent<CamareroController>().index = listaCamareros.Count;
-        obj.GetComponent<CamareroController>().barPos = new Vector3 ((barPos.transform.position.x + listaCamareros.Count), barPos.transform.position.y, barPos.transform.position.z);
+        obj.GetComponent<CamareroController>().barPos = new Vector3 ((barPos.transform.position.x - 1 * listaCamareros.Count), barPos.transform.position.y, barPos.transform.position.z);
         listaCamareros.Add(obj.GetComponent<CamareroController>());
     }
     public void removeCamarero()
@@ -66,7 +96,7 @@ public class WorldController : MonoBehaviour
     }
     public void addBarman()
     {
-        GameObject obj = Instantiate(prefabBarman, new Vector3(parentBarman.transform.position.x+2*listaBarman.Count, parentBarman.transform.position.y, parentBarman.transform.position.z), parentBarman.transform.rotation);
+        GameObject obj = Instantiate(prefabBarman, new Vector3(parentBarman.transform.position.x-1*listaBarman.Count, parentBarman.transform.position.y, parentBarman.transform.position.z), parentBarman.transform.rotation);
         obj.transform.SetParent(parentBarman.transform);
         obj.GetComponent<BarmanController>().worldController = this;
         listaBarman.Add(obj.GetComponent<BarmanController>());
@@ -143,23 +173,19 @@ public class WorldController : MonoBehaviour
         ClienteController c = null;
         int num = Random.Range(0, listaClientes.Count);
         c = listaClientes[num];
-        if (c.state == 0 || c.state == 1) //añadir clientes que se van
-        {
-            return null;
-        }
-        else
+        if(c.state == 2 || c.state == 3)
         {
             if (num == cAux) //para que no pida propina dos veces seguidas al mismo cliente, que es abusar
                 return null;
             cAux = num;
             return c;
         }
+        else 
+        { 
+            return null; 
+        }
     }
-    public void Start()
-    {
-        FindObjectOfType<AudioManager>().Play("Musica");
-        musicaSonando = true;
-    }
+
 
     public void changeMusic()
     {
@@ -180,7 +206,7 @@ public class WorldController : MonoBehaviour
         //borrar clientes
         if (listaClientes.Count > 0)
         {
-            for (int i = listaClientes.Count; i >= 0; i--)
+            for (int i = listaClientes.Count; i >= 0; i--) { }
                 removeCLient();
         }
         //borrar camareros
@@ -201,7 +227,7 @@ public class WorldController : MonoBehaviour
             listaMesas[i].ocupado = false;
         }
         //tp bailarina a init
-        bailarina.GetComponent<DecoratorBT>().CreateBehaviourTree();
-        bailarina.transform.position = bailarina.GetComponent<DecoratorBT>().GetInitPos();
+        bailarina.GetComponent<BTBailarina>().CreateBehaviourTree();
+        bailarina.transform.position = bailarina.GetComponent<BTBailarina>().GetInitPos();
     }
 }

@@ -6,6 +6,8 @@ public class Bebida: MonoBehaviour
 {
     public Vector3 posicionCliente;
     //Color
+    public int tipo; // 0 = amarillo / 1 = azul / 2 = rojo / 3 = Verde
+    [SerializeField] public  GameObject[] modeloBebidas;
     //lo q sea
     public BarmanController barman;
     public ClienteController cliente;
