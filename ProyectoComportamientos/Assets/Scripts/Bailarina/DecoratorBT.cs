@@ -15,7 +15,18 @@ public class DecoratorBT : MonoBehaviour {
     NavMeshAgent navMeshAgent;
     private bool recibePropina;
     private Vector3 initPos;
-    
+
+    private bool objectSpawned = false;
+    GameObject bocAux = null;
+    [SerializeField] public GameObject bocadilloPedirPropina;
+    [SerializeField] public GameObject bocadilloEnfado;
+    [SerializeField] public GameObject bocadilloContento;
+    private bool successPropina = false;
+    private bool showEmotions = false;
+    private bool esperaUnPoco = false;
+
+
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -24,7 +35,7 @@ public class DecoratorBT : MonoBehaviour {
         CreateBehaviourTree();
     }
 
-    private void CreateBehaviourTree()
+    public void CreateBehaviourTree()
     {
         behaviourTree = new BehaviourTreeEngine(false);
 
@@ -152,18 +163,37 @@ public class DecoratorBT : MonoBehaviour {
     {
         //print("pide propina");
         //animacion pedir propina
+        //Borrar bocadillos del cliente para que parezca que le está haciendo caso xd
+        cliente.BorrarBocadillos();
+        if (!objectSpawned)
+        {
+            bocAux = Instantiate(bocadilloPedirPropina, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+            objectSpawned = true;
+        }
+        StartCoroutine(WaitSeconds());
+
+        //hacer que espere con el uso de una variable que se comprueba en el success
+
     }
 
     private ReturnValues PedirPropinaSuccessCheck()
     {
         //Write here the code for the success check for PedirPropina
-        return ReturnValues.Succeed;
+        if (successPropina)
+        {
+            successPropina = false;
+            return ReturnValues.Succeed;
+        }
+        else
+            return ReturnValues.Running;
     }
 
     private void PropinaClienteAction()
     {
         //print("RecibePropina");
         recibePropina = cliente.recibirPropina();
+        StartCoroutine(DoNothingForSeconds());
+
     }
 
     private ReturnValues PropinaClienteSuccessCheck()
@@ -171,38 +201,74 @@ public class DecoratorBT : MonoBehaviour {
         //Write here the code for the success check for PropinaCliente
         if (recibePropina)
         {
-            return ReturnValues.Succeed;
+            if (esperaUnPoco)
+            {
+                esperaUnPoco = false;
+                return ReturnValues.Succeed;
+            }else
+                return ReturnValues.Running;
         }
         else
         {
-            return ReturnValues.Failed;
+            if (esperaUnPoco)
+            {
+                esperaUnPoco = false;
+                return ReturnValues.Failed;
+            }
+            else
+                return ReturnValues.Running;
         }
     }
 
     private void EstarContentaAction()
     {
         //print("Contenta");
+        //bocadillo contenta
+        if (!objectSpawned)
+        {
+            bocAux = Instantiate(bocadilloContento, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+            objectSpawned = true;
+        }
+        StartCoroutine(ShowEmotionsAfterSeconds());
     }
 
     private ReturnValues EstarContentaSuccessCheck()
     {
         //Write here the code for the success check for EstarContenta
         //comprobar animacion finalizar contenta
-        cliente.pausaBailarina = false;
-        return ReturnValues.Succeed;
+        if (showEmotions)
+        {
+            showEmotions = false;
+            cliente.pausaBailarina = false;
+            return ReturnValues.Succeed;
+        }
+        else
+            return ReturnValues.Running;
     }
 
     private void EnfadarseAction()
     {
         //print("Enfado");
+        if (!objectSpawned)
+        {
+            bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+            objectSpawned = true;
+        }
+        StartCoroutine(ShowEmotionsAfterSeconds());
     }
 
     private ReturnValues EnfadarseSuccessCheck()
     {
         //Write here the code for the success check for Enfadarse
         //Comprobar animacion finalizar enfadar
-        cliente.pausaBailarina = false;
-        return ReturnValues.Succeed;
+        if (showEmotions)
+        {
+            showEmotions = false;
+            cliente.pausaBailarina = false;
+            return ReturnValues.Succeed;
+        }
+        else
+            return ReturnValues.Running;
     }
     private void GoInitPosAction()
     {
@@ -233,5 +299,36 @@ public class DecoratorBT : MonoBehaviour {
     {
         //Write here the code for the success check for Bailar
         return ReturnValues.Succeed;
+    }
+    IEnumerator WaitSeconds()
+    {
+        yield return new WaitForSeconds(3);
+        if (objectSpawned && bocAux != null)
+        {
+            Destroy(bocAux.transform.GetChild(0).gameObject);
+            Destroy(bocAux.gameObject);
+            objectSpawned = false;
+        }
+        successPropina = true;
+    }
+    IEnumerator ShowEmotionsAfterSeconds()
+    {
+        yield return new WaitForSeconds(2);
+        if (objectSpawned && bocAux != null)
+        {
+            Destroy(bocAux.transform.GetChild(0).gameObject);
+            Destroy(bocAux.gameObject);
+            objectSpawned = false;
+        }
+        showEmotions = true;
+    }
+    IEnumerator DoNothingForSeconds()
+    {
+        yield return new WaitForSeconds(2);
+        esperaUnPoco = true;
+    }
+    public Vector3 GetInitPos()
+    {
+        return this.initPos;
     }
 }

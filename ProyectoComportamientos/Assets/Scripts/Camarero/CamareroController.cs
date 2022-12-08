@@ -119,13 +119,17 @@ public class CamareroController : MonoBehaviour
     IEnumerator WaitSeconds()
     {
         yield return new WaitForSeconds(3);
+        BorrarBocadillos();
+        state = 3;
+    }
+    public void BorrarBocadillos()
+    {
         if (objectSpawned && bocAux != null)
         {
             Destroy(bocAux.transform.GetChild(0).gameObject);
             Destroy(bocAux.gameObject);
             objectSpawned = false;
         }
-        state = 3;
     }
 }
 

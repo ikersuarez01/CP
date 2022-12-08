@@ -79,13 +79,7 @@ public class BarmanController : MonoBehaviour
                 break;
             case 5:
                 //Espera hasta que el camarero llegue para entregarle la bebida
-                if (objectSpawned && bocAux != null)
-                {
-                    Destroy(bocAux.transform.GetChild(0).gameObject);
-                    Destroy(bocAux.gameObject);
-                    objectSpawned = false;
-
-                }
+                BorrarBocadillos();
                 break;
         }
     }
@@ -102,6 +96,15 @@ public class BarmanController : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+    public void BorrarBocadillos()
+    {
+        if (objectSpawned && bocAux != null)
+        {
+            Destroy(bocAux.transform.GetChild(0).gameObject);
+            Destroy(bocAux.gameObject);
+            objectSpawned = false;
         }
     }
 }

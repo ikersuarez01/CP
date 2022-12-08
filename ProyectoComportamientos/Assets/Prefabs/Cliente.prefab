@@ -139,11 +139,14 @@ MonoBehaviour:
   worldController: {fileID: 0}
   bocadilloEsperando: {fileID: 6084234580111468511, guid: affe4e32f568a9b49ab63fa391d013b9, type: 3}
   bocadilloBebiendo: {fileID: 6084234580111468511, guid: bd1128203190d774eb57debe76cbb65e, type: 3}
+  bocadilloRechazarPropina: {fileID: 6084234580111468511, guid: 46c045c1bc584d04480dca487b727752, type: 3}
+  bocadilloAceptarPropina: {fileID: 6084234580111468511, guid: 523d8638d90333f4eaedd658e9ea4ffe, type: 3}
   state: 0
   destination: {x: 0, y: 0, z: 0}
   initPos: {x: 0, y: 0, z: 0}
   mesa: {fileID: 0}
   bebida: {fileID: 0}
+  pausaBailarina: 0
 --- !u!114 &7525180750148499405
 MonoBehaviour:
   m_ObjectHideFlags: 0
