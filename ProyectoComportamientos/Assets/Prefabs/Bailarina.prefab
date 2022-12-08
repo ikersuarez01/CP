@@ -131,7 +131,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1309843179800610021}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4f119c672dbc254eb339c9fc83a5898, type: 3}
+  m_Script: {fileID: 11500000, guid: 38453f0173fe0944e867bab0f709bc15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   worldController: {fileID: 0}

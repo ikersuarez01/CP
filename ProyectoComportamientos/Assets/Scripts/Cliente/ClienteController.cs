@@ -11,6 +11,12 @@ public class ClienteController : MonoBehaviour
     [SerializeField] public GameObject bocadilloBebiendo;
     [SerializeField] public GameObject bocadilloRechazarPropina;
     [SerializeField] public GameObject bocadilloAceptarPropina;
+    [SerializeField] public GameObject bocadilloBebidaAmarillo;
+    [SerializeField] public GameObject bocadilloBebidaAzul;
+    [SerializeField] public GameObject bocadilloBebidaRojo;
+    [SerializeField] public GameObject bocadilloBebidaVerde;
+
+    CamareroController camarero;
 
 
     public bool borracho = false;
@@ -71,7 +77,7 @@ public class ClienteController : MonoBehaviour
                 case 2:
                     //Esperando camarero libre
                     oneTime = false;
-                    CamareroController camarero = worldController.camareroLibre();
+                    camarero = worldController.camareroLibre();
                     //bocadillo esperando
                     if (!objectSpawned)
                     {
@@ -81,6 +87,7 @@ public class ClienteController : MonoBehaviour
 
                     if (camarero != null)
                     {
+                        BorrarBocadillos();
                         tipoBebida = Random.Range(0, 4);
                         bebida.tipo = tipoBebida;
                         camarero.destination = new Vector3(destination.x-1, destination.y, destination.z+1);
@@ -88,11 +95,6 @@ public class ClienteController : MonoBehaviour
                         bebida.cliente = this;
                         camarero.bebida = bebida;
                         camarero.state = 1;
-                        if (objectSpawned) {
-                            Destroy(bocAux.transform.GetChild(0).gameObject);
-                            Destroy(bocAux.gameObject);
-                            objectSpawned = false;
-                        }
                         state = 3;
                     }
                     break;
@@ -210,4 +212,50 @@ public class ClienteController : MonoBehaviour
             objectSpawned = false;
         }
     }
+    public void BocadillosBebida()
+    {
+        StartCoroutine(ShowBebidaChosen());
+    }
+
+    IEnumerator ShowBebidaChosen()
+    {
+        yield return new WaitForSeconds(2); 
+        switch (tipoBebida)
+        {
+            case 0:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaAmarillo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+            case 1:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaAzul, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+            case 2:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaRojo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+            case 3:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaVerde, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+        }
+        camarero.BorrarBocadillos();
+        yield return new WaitForSeconds(2);
+        BorrarBocadillos();
+
+        camarero.state = 3;
+    }
+    
 }

@@ -141,6 +141,12 @@ MonoBehaviour:
   bocadilloBebiendo: {fileID: 6084234580111468511, guid: bd1128203190d774eb57debe76cbb65e, type: 3}
   bocadilloRechazarPropina: {fileID: 6084234580111468511, guid: 46c045c1bc584d04480dca487b727752, type: 3}
   bocadilloAceptarPropina: {fileID: 6084234580111468511, guid: 523d8638d90333f4eaedd658e9ea4ffe, type: 3}
+  bocadilloBebidaAmarillo: {fileID: 6084234580111468511, guid: 806b0e9e525aef949822f992ffbe5e35, type: 3}
+  bocadilloBebidaAzul: {fileID: 6084234580111468511, guid: 356f0f6c8e975b246b0409706f31d507, type: 3}
+  bocadilloBebidaRojo: {fileID: 6084234580111468511, guid: a357cbfd4fbd7ed4c86ab25ce2541b3b, type: 3}
+  bocadilloBebidaVerde: {fileID: 6084234580111468511, guid: a9037822b459d984392f9ffffd2ee997, type: 3}
+  borracho: 0
+  exigente: 0
   state: 0
   destination: {x: 0, y: 0, z: 0}
   initPos: {x: 0, y: 0, z: 0}

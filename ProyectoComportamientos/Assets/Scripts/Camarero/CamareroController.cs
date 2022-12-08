@@ -46,15 +46,16 @@ public class CamareroController : MonoBehaviour
                 //navMeshAgent.destination = destination;
                 if (comprobatePos())
                 {
-                    if (!objectSpawned)
-                    {
-                        bocAux = Instantiate(bocadilloPregunta, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
-                        objectSpawned = true;
-                    }
                     if (!oneTime)
                     {
+                        if (!objectSpawned)
+                        {
+                            bocAux = Instantiate(bocadilloPregunta, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                            objectSpawned = true;
+                        }
                         oneTime = true;
                         StartCoroutine(WaitSeconds());
+                        bebida.cliente.BocadillosBebida();
                     }
                 }
                 break;
@@ -122,9 +123,8 @@ public class CamareroController : MonoBehaviour
     }
     IEnumerator WaitSeconds()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
         BorrarBocadillos();
-        state = 3;
     }
     public void BorrarBocadillos()
     {
