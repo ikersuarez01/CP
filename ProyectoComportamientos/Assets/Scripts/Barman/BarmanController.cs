@@ -88,6 +88,8 @@ public class BarmanController : MonoBehaviour
                     objectSpawned = false;
                     state = 0;
                 }
+                //Espera hasta que el camarero llegue para entregarle la bebida
+                BorrarBocadillos();
                 break;
         }
     }
@@ -104,6 +106,15 @@ public class BarmanController : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+    public void BorrarBocadillos()
+    {
+        if (objectSpawned && bocAux != null)
+        {
+            Destroy(bocAux.transform.GetChild(0).gameObject);
+            Destroy(bocAux.gameObject);
+            objectSpawned = false;
         }
     }
 }

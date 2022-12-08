@@ -20,9 +20,12 @@ public class WorldController : MonoBehaviour
 
     [SerializeField] private GameObject barPos;
 
+    [SerializeField] private GameObject bailarina;
+
 
     [SerializeField] public GameObject puertaPos;
     public bool musicaSonando;
+    public int cAux = -1;
 
     public void addCLient()
     {
@@ -36,6 +39,7 @@ public class WorldController : MonoBehaviour
         if(listaClientes.Count > 0)
         {
             GameObject obj = listaClientes[listaClientes.Count - 1].gameObject;
+            obj.GetComponent<ClienteController>().BorrarBocadillos();
             listaClientes.RemoveAt(listaClientes.Count - 1);
             Destroy(obj);
         }
@@ -55,6 +59,7 @@ public class WorldController : MonoBehaviour
         if (listaCamareros.Count > 0)
         {
             GameObject obj = listaCamareros[listaCamareros.Count - 1].gameObject;
+            obj.GetComponent<CamareroController>().BorrarBocadillos();
             listaCamareros.RemoveAt(listaCamareros.Count - 1);
             Destroy(obj);
         }
@@ -71,6 +76,7 @@ public class WorldController : MonoBehaviour
         if (listaBarman.Count > 0)
         {
             GameObject obj = listaBarman[listaBarman.Count - 1].gameObject;
+            obj.GetComponent<BarmanController>().BorrarBocadillos();
             listaBarman.RemoveAt(listaBarman.Count - 1);
             Destroy(obj);
         }
@@ -137,12 +143,15 @@ public class WorldController : MonoBehaviour
         ClienteController c = null;
         int num = Random.Range(0, listaClientes.Count);
         c = listaClientes[num];
-        if (c.state == 0 || c.state == 1)
+        if (c.state == 0 || c.state == 1) //añadir clientes que se van
         {
             return null;
         }
         else
         {
+            if (num == cAux) //para que no pida propina dos veces seguidas al mismo cliente, que es abusar
+                return null;
+            cAux = num;
             return c;
         }
     }
@@ -165,5 +174,34 @@ public class WorldController : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Musica");
             musicaSonando = true;
         }
+    }
+    public void ResetListas()
+    {
+        //borrar clientes
+        if (listaClientes.Count > 0)
+        {
+            for (int i = listaClientes.Count; i >= 0; i--)
+                removeCLient();
+        }
+        //borrar camareros
+        if (listaCamareros.Count > 0)
+        {
+            for (int i = listaCamareros.Count; i >= 0; i--)
+                removeCamarero();
+        }
+        //borrar barman
+        if (listaBarman.Count > 0)
+        {
+            for (int i = listaBarman.Count; i >= 0; i--)
+                removeBarman();
+        }
+        //vaciar mesas
+        for (int i = 0; i < listaMesas.Count; i++)
+        {
+            listaMesas[i].ocupado = false;
+        }
+        //tp bailarina a init
+        bailarina.GetComponent<DecoratorBT>().CreateBehaviourTree();
+        bailarina.transform.position = bailarina.GetComponent<DecoratorBT>().GetInitPos();
     }
 }

@@ -9,6 +9,8 @@ public class ClienteController : MonoBehaviour
     [SerializeField] public WorldController worldController;
     [SerializeField] public GameObject bocadilloEsperando;
     [SerializeField] public GameObject bocadilloBebiendo;
+    [SerializeField] public GameObject bocadilloRechazarPropina;
+    [SerializeField] public GameObject bocadilloAceptarPropina;
 
 
 
@@ -36,6 +38,8 @@ public class ClienteController : MonoBehaviour
         if (pausaBailarina)
         {
             //Se para pa mirar a la bailarina
+            //si la bailarina va hacia él, para de hacer todo
+            
         }
         else
         {
@@ -128,25 +132,49 @@ public class ClienteController : MonoBehaviour
     public bool recibirPropina()
     {
         int aux = Random.Range(0, 2);
+        //borro el bocadillo que haya estado pintado antes
+        BorrarBocadillos();
         if (aux < 1)
         {
+            //bocadillo rechazar propina
+            if (!objectSpawned)
+            {
+                bocAux = Instantiate(bocadilloRechazarPropina, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                objectSpawned = true;
+            }
+            StartCoroutine(WaitSeconds2());
             return false;
         }
         else
         {
+            //bocadillo dar propina
+            if (!objectSpawned)
+            {
+                bocAux = Instantiate(bocadilloAceptarPropina, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                objectSpawned = true;
+            }
+            StartCoroutine(WaitSeconds2());
             return true;
         }
     }
     IEnumerator WaitSeconds()
     {
         yield return new WaitForSeconds(5);
+        BorrarBocadillos();
+        state = 5;
+    }
+    IEnumerator WaitSeconds2()
+    {
+        yield return new WaitForSeconds(3);
+        BorrarBocadillos();
+    }
+    public void BorrarBocadillos()
+    {
         if (objectSpawned && bocAux != null)
-        { 
+        {
             Destroy(bocAux.transform.GetChild(0).gameObject);
             Destroy(bocAux.gameObject);
             objectSpawned = false;
         }
-        state = 5;
     }
-    
 }

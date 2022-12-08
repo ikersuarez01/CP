@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d672411e400a81b43b90972549ae73b1, type: 2}
+  - {fileID: 2100000, guid: 6a0ec2ccff99fba4599b459cce576911, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 91297226132898989}
   - component: {fileID: 9008015550266662910}
   m_Layer: 0
-  m_Name: Bocadillo
+  m_Name: BocadilloEsperando
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
