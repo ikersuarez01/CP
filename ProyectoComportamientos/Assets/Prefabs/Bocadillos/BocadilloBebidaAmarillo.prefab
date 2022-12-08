@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a7b67bc0f9c52de4a82d73b52873fdd7, type: 2}
+  - {fileID: 2100000, guid: ecfd3eb9ae46f364faa8c800b6343c82, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 91297226132898989}
   - component: {fileID: 9008015550266662910}
   m_Layer: 0
-  m_Name: BocadilloBebida
+  m_Name: BocadilloBebidaAmarillo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
