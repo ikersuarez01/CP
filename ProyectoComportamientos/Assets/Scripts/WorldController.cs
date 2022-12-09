@@ -21,6 +21,10 @@ public class WorldController : MonoBehaviour
     [SerializeField] private GameObject barPos;
 
     [SerializeField] private GameObject bailarina;
+    [SerializeField] private Camera cam1;
+    [SerializeField] private Camera cam2;
+    [SerializeField] private Camera cam3;
+    [SerializeField] private Camera cam4;
 
 
     [SerializeField] public GameObject puertaPos;
@@ -33,6 +37,10 @@ public class WorldController : MonoBehaviour
         time = 0f;
         FindObjectOfType<AudioManager>().Play("Musica");
         musicaSonando = true;
+        cam1.enabled = true;
+        cam2.enabled = false;
+        cam3.enabled = false;
+        cam4.enabled = false;
     }
 
     private void Update()
@@ -229,5 +237,38 @@ public class WorldController : MonoBehaviour
         //tp bailarina a init
         bailarina.GetComponent<BTBailarina>().CreateBehaviourTree();
         bailarina.transform.position = bailarina.GetComponent<BTBailarina>().GetInitPos();
+    }
+    public void changeCams()
+    {
+        cam1.enabled = !cam1.enabled;
+        cam2.enabled = !cam2.enabled;
+    }
+    public void changeToCam1()
+    {
+        cam3.enabled = false;
+        cam2.enabled = false;
+        cam1.enabled = true;
+        cam4.enabled = false;
+    }
+    public void changeToCam2()
+    {
+        cam1.enabled = false;
+        cam3.enabled = false;
+        cam2.enabled = true;
+        cam4.enabled = false;
+    }
+    public void changeToCam3()
+    {
+        cam1.enabled = false;
+        cam2.enabled = false;
+        cam3.enabled = true;
+        cam4.enabled = false;
+    }
+    public void changeToCam4()
+    {
+        cam1.enabled = false;
+        cam2.enabled = false;
+        cam4.enabled = true;
+        cam3.enabled = false;
     }
 }
