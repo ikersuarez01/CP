@@ -87,7 +87,6 @@ public class ClienteController : MonoBehaviour
 
                     if (camarero != null)
                     {
-                        BorrarBocadillos();
                         tipoBebida = Random.Range(0, 4);
                         bebida.tipo = tipoBebida;
                         camarero.destination = new Vector3(destination.x-1, destination.y, destination.z+1);

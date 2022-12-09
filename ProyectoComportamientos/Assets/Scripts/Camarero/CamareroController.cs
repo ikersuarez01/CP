@@ -50,6 +50,7 @@ public class CamareroController : MonoBehaviour
                     {
                         if (!objectSpawned)
                         {
+                            bebida.cliente.BorrarBocadillos();
                             bocAux = Instantiate(bocadilloPregunta, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
                             objectSpawned = true;
                         }
