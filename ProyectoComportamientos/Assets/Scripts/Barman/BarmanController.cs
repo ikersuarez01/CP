@@ -10,6 +10,7 @@ public class BarmanController : MonoBehaviour
     public int state = 0;
     [SerializeField] public WorldController worldController;
     [SerializeField] public GameObject bocadillo1;
+    [SerializeField] public GameObject[] modeloBasos;
     GameObject bocAux = null;
     private bool objectSpawned = false;
 
@@ -18,12 +19,18 @@ public class BarmanController : MonoBehaviour
 
     public Bebida bebida;
     public GameObject modeloBebida;
+
+    public Animator anim;
     void Start()
     {
+        modeloBasos[0].SetActive(false);
+        modeloBasos[1].SetActive(false);
+        modeloBasos[2].SetActive(false);
+        modeloBasos[3].SetActive(false);
+        anim = GetComponentInChildren<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         initRot = transform.position;
         destinationRot = new Vector3(initRot.x, initRot.y + 180, initRot.z);
-        bebida = GetComponent<Bebida>();
     }
 
     // Update is called once per frame
@@ -32,17 +39,27 @@ public class BarmanController : MonoBehaviour
         switch (state)
         {
             case 0:
+                anim.Play("Idle");
                 //Esperando a que haya bebidas para preparar
                 Bebida aux = worldController.bebidaParaPreparar();
                 if (aux != null)
                 {
                     bebida = aux;
                     bebida.barman = this;
+                    modeloBasos[0].SetActive(false);
+                    modeloBasos[1].SetActive(false);
+                    modeloBasos[2].SetActive(false);
+                    modeloBasos[3].SetActive(false);
+                    modeloBasos[bebida.tipo].SetActive(true);
                     state = 1;
                 }
                 break;
             case 1:
                 //Giro hacia preparar bebida
+                transform.Rotate(new Vector3(0, 180, 0), Space.Self);
+                anim.Play("PrepararBebida");
+                timer = 0f;
+                oneTimeAnim = false;
                 state = 2;
                 break;
             case 2:
@@ -63,7 +80,7 @@ public class BarmanController : MonoBehaviour
                     bocAux = Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
-                modeloBebida = Instantiate(bebida.modeloBebidas[bebida.tipo], new Vector3(this.transform.position.x, this.transform.position.y+1.6f, this.transform.position.z-1.5f), Quaternion.identity);
+                modeloBebida = Instantiate(bebida.modeloBebidas[bebida.tipo], new Vector3(this.transform.position.x, this.transform.position.y+0.88f, this.transform.position.z-1.5f), Quaternion.identity);
                 state = 4;
                 break;
                                 
@@ -101,11 +118,22 @@ public class BarmanController : MonoBehaviour
         }
     }
 
-    private float waitTime = 3f;
+    private float waitTime = 6.8f;
     private float timer = 0;
+    private bool oneTimeAnim = false;
     private bool prepararBebida()
     {
         timer += Time.deltaTime;
+        if (timer > 4.2f){
+            if (!oneTimeAnim)
+            {
+                oneTimeAnim = true;
+                transform.Rotate(new Vector3(0, 180, 0), Space.World);
+                anim.Play("ServirBebida");
+            }
+        }
+        
+        
         if (timer > waitTime)
         {
             return true;

@@ -22,28 +22,42 @@ public class CamareroController : MonoBehaviour
     public Vector3 destination;
 
     public bool oneTime = false;
-    
+
+    [SerializeField] public GameObject bocadilloBebidaAmarillo;
+    [SerializeField] public GameObject bocadilloBebidaAzul;
+    [SerializeField] public GameObject bocadilloBebidaRojo;
+    [SerializeField] public GameObject bocadilloBebidaVerde;
+
+
+    [SerializeField] public GameObject[] modeloBasos;
+    public Animator anim;
     private void Start()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        modeloBasos[0].SetActive(false);
+        modeloBasos[1].SetActive(false);
+        modeloBasos[2].SetActive(false);
+        modeloBasos[3].SetActive(false);
+        anim = GetComponentInChildren<Animator>();
         initPos = this.transform.position;
-        bebida = GetComponent<Bebida>();
     }
     void Update()
     {
         switch (state)
         {
             case 0:
+                anim.Play("Idle");
                 //Esperando
                 break;
             case 1:
                 //Avanzar
+                oneTime = false;
                 navMeshAgent.destination = destination;
                 state = 2;
                 break;
             case 2:
                 //Movimiento hacia cliente 
                 //navMeshAgent.destination = destination;
+                anim.Play("WalkSinBebida");
                 if (comprobatePos())
                 {
                     if (!oneTime)
@@ -61,12 +75,14 @@ public class CamareroController : MonoBehaviour
                 break;
             case 3:
                 //Cogiendo comanda al cliente
+                anim.Play("HablaSinBebida");
                 state = 4;
                 oneTime = false;
                 destination = barPos; //destino del bar
                 navMeshAgent.destination = destination;
                 break;
             case 4:
+                anim.Play("WalkSinBebida");
                 //Movimiento hacia bar
                 if (comprobatePos())
                 {
@@ -75,18 +91,26 @@ public class CamareroController : MonoBehaviour
                 break;
             case 5:
                 // Pidiendo la comanda al barman
-                worldController.addBebidaParaPreparar(bebida);
-                state = 6;
+                anim.Play("HablaSinBebida");
+                if (!oneTime)
+                {
+                    oneTime = true;
+                    worldController.addBebidaParaPreparar(bebida);
+                    StartCoroutine(AskBebida());
+                }
                 break;
             case 6:
+                anim.Play("WalkSinBebida");
                 //Movimiento hacia initPos
                 navMeshAgent.destination = initPos;
+                oneTime = false;
                 if (comprobatePos())
                 {
                     state = 0;
                 }
                 break;
             case 7:
+                anim.Play("WalkSinBebida");
                 //Movimiento hacia bar
                 if (comprobatePos())
                 {
@@ -94,12 +118,14 @@ public class CamareroController : MonoBehaviour
                 }
                 break;
             case 8:
+                anim.Play("CogerBebida");
                 //Cogiendo comanda al barman
                 bebida.barman.state = 6;
                 state = 9;
                 navMeshAgent.destination = bebida.posicionCliente;
                 break;
             case 9:
+                anim.Play("WalkBebida");
                 //Movimiento hacia cliente
                 if (comprobatePos())
                 {
@@ -107,6 +133,7 @@ public class CamareroController : MonoBehaviour
                 }
                 break;
             case 10:
+                anim.Play("DejarBebida");
                 //Entregando la comanda al cliente
                 bebida.cliente.state = 4;
                 state = 6;
@@ -114,8 +141,8 @@ public class CamareroController : MonoBehaviour
             default:
                 break;
         }
-    
-        
+
+
     }
     private bool comprobatePos()
     {
@@ -134,6 +161,43 @@ public class CamareroController : MonoBehaviour
             Destroy(bocAux.gameObject);
             objectSpawned = false;
         }
+    }
+    IEnumerator AskBebida()
+    {
+        switch (bebida.tipo)
+        {
+            case 0:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaAmarillo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+            case 1:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaAzul, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+            case 2:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaRojo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+            case 3:
+                if (!objectSpawned)
+                {
+                    bocAux = Instantiate(bocadilloBebidaVerde, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    objectSpawned = true;
+                }
+                break;
+        }
+        yield return new WaitForSeconds(0.5f);
+        BorrarBocadillos();
+        state = 6;
     }
 }
 

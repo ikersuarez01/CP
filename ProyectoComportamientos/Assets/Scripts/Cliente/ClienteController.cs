@@ -15,6 +15,7 @@ public class ClienteController : MonoBehaviour
     [SerializeField] public GameObject bocadilloBebidaAzul;
     [SerializeField] public GameObject bocadilloBebidaRojo;
     [SerializeField] public GameObject bocadilloBebidaVerde;
+    [SerializeField] public GameObject bocadilloEnfado;
 
     CamareroController camarero;
 
@@ -37,8 +38,19 @@ public class ClienteController : MonoBehaviour
     private bool mesaLibreFirstTime = true;
 
     private bool oneTime = false;
+    private float timePuerta;
+    private float timeMesa;
+    private float t = 0f;
     private void Start()
     {
+        t = 0f;
+        timePuerta = 8f;
+        timeMesa = 16f;
+        if (exigente)
+        {
+            timePuerta = timePuerta / 2f;
+            timeMesa = timeMesa / 2f;
+        }
         navMeshAgent = GetComponent<NavMeshAgent>();
         initPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         bebida = GetComponent<Bebida>();
@@ -57,6 +69,17 @@ public class ClienteController : MonoBehaviour
             switch(state){
                 case 0:
                     //Esperando mesa libre
+                    t += Time.deltaTime / timePuerta;
+                    if (t > 1)
+                    {
+                        t = 0;
+                        bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux.GetComponent<BocadilloCamara>().client = this;
+                        bocAux.GetComponent<BocadilloCamara>().movement = true;
+                        worldController.numEPuerta++;
+                        state = 5;
+                        break;
+                    }
                     Mesa aux = worldController.mesaLibre();
                     if (aux != null)
                     {
@@ -64,6 +87,7 @@ public class ClienteController : MonoBehaviour
                         destination = mesa.transform.position;
                         destination = new Vector3(destination.x+1, destination.y, destination.z);
                         navMeshAgent.destination = destination;
+                        t = 0;
                         state = 1;
                     }
                     break;
@@ -76,12 +100,31 @@ public class ClienteController : MonoBehaviour
                     break;
                 case 2:
                     //Esperando camarero libre
+                    if (!comprobatePos())
+                    {
+                        state = 1;
+                        break;
+                    }
                     oneTime = false;
+                    t += Time.deltaTime / timeMesa;
+                    if (t > 1)
+                    {
+                        //t = 0;
+                        BorrarBocadillos();
+                        bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux.GetComponent<BocadilloCamara>().client = this;
+                        bocAux.GetComponent<BocadilloCamara>().movement = true;
+                        navMeshAgent.destination = puertaPos;
+                        worldController.numEMesa++;
+                        state = 5;
+                        break;
+                    }
                     camarero = worldController.camareroLibre();
                     //bocadillo esperando
                     if (!objectSpawned)
                     {
                         bocAux = Instantiate(bocadilloEsperando, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux.GetComponent<BocadilloCamara>().client = this;
                         objectSpawned = true;
                     }
 
@@ -99,6 +142,7 @@ public class ClienteController : MonoBehaviour
                     }
                     break;
                 case 3:
+                    t = 0;
                     //Esperando
                     break;
                 case 4:
@@ -122,7 +166,10 @@ public class ClienteController : MonoBehaviour
                     if (mesaLibreFirstTime)
                     {
                         mesaLibreFirstTime = false;
-                        mesa.ocupado = false;
+                        if(mesa != null)
+                        {
+                            mesa.ocupado = false;
+                        }
                     }
                     state = 6;
                     break;
@@ -186,21 +233,24 @@ public class ClienteController : MonoBehaviour
             int p = Random.Range(0, 100);
             if (p <= 33.3f)
             {
+                worldController.numCContento++;
                 state = 5;
             }
             else
             {
+                worldController.numCContento++;
                 state = 2;
             }
         }
         else
         {
+            worldController.numCContento++;
             state = 5;
         }
     }
     IEnumerator WaitSeconds2()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2f);
         BorrarBocadillos();
     }
     public void BorrarBocadillos()
@@ -216,7 +266,6 @@ public class ClienteController : MonoBehaviour
     {
         StartCoroutine(ShowBebidaChosen());
     }
-
     IEnumerator ShowBebidaChosen()
     {
         yield return new WaitForSeconds(2); 
