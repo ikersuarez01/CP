@@ -26,10 +26,12 @@ public class BTBailarina : MonoBehaviour {
     private bool esperaUnPoco = false;
 
 
-
+    public Animator anim;
     // Start is called before the first frame update
     private void Start()
     {
+        anim = GetComponentInChildren<Animator>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         initPos = transform.position;
         navMeshAgent = this.GetComponent<NavMeshAgent>();
         CreateBehaviourTree();
@@ -107,6 +109,9 @@ public class BTBailarina : MonoBehaviour {
     {
         //Animacion espera
         //print("buscando cliente");
+        bailando = false;
+        anim.Play("Idle");
+        transform.rotation = Quaternion.Euler(0, 90, 0);
     }
 
     private ReturnValues PeticionClienteSuccessCheck()
@@ -129,11 +134,17 @@ public class BTBailarina : MonoBehaviour {
     private void AvanzarHastaClienteAction()
     {
         //print("empiezo a caminar");
+        walk = false;
+        anim.Play("Walk");
         Vector3 pos = new Vector3(cliente.gameObject.transform.position.x, cliente.gameObject.transform.position.y, cliente.gameObject.transform.position.z+1);
         navMeshAgent.destination = pos;
     }
     private ReturnValues AvanzarHastaClienteSuccessCheck()
     {
+        if (worldController.musicaSonando)
+        {
+            return ReturnValues.Failed;
+        }
         if (navMeshAgent.remainingDistance > 0)
         {
             //print("todavia no he llegado al cliente");
@@ -149,6 +160,8 @@ public class BTBailarina : MonoBehaviour {
 
     private void PararEnClienteAction()
     {
+        anim.Play("Habla");
+        transform.LookAt(cliente.transform.position);
         //animacion pedir
         //print("parado en cliente");
         cliente.pausaBailarina = true;
@@ -167,7 +180,7 @@ public class BTBailarina : MonoBehaviour {
         cliente.BorrarBocadillos();
         if (!objectSpawned)
         {
-            bocAux = Instantiate(bocadilloPedirPropina, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+            bocAux = Instantiate(bocadilloPedirPropina, new Vector3(this.transform.position.x, this.transform.position.y +3, this.transform.position.z), Quaternion.identity);
             objectSpawned = true;
         }
         StartCoroutine(WaitSeconds());
@@ -226,7 +239,7 @@ public class BTBailarina : MonoBehaviour {
         //bocadillo contenta
         if (!objectSpawned)
         {
-            bocAux = Instantiate(bocadilloContento, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+            bocAux = Instantiate(bocadilloContento, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
             objectSpawned = true;
         }
         StartCoroutine(ShowEmotionsAfterSeconds());
@@ -251,7 +264,7 @@ public class BTBailarina : MonoBehaviour {
         //print("Enfado");
         if (!objectSpawned)
         {
-            bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+            bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
             objectSpawned = true;
         }
         StartCoroutine(ShowEmotionsAfterSeconds());
@@ -270,29 +283,42 @@ public class BTBailarina : MonoBehaviour {
         else
             return ReturnValues.Running;
     }
+    bool walk = false;
     private void GoInitPosAction()
     {
-        navMeshAgent.destination = initPos;
+        if (!walk)
+        {
+            walk = true;
+            anim.Play("Walk");
+        }
+        if(!(initPos.x==transform.position.x && initPos.z == transform.position.z))
+        {
+            navMeshAgent.destination = initPos;
+        }
     }
     private ReturnValues GoInitPosSuccessCheck()
     {
-        if (worldController.musicaSonando)
+        if (!worldController.musicaSonando)
         {
-            return ReturnValues.Failed;
+            return ReturnValues.Succeed;
         }
         if (navMeshAgent.remainingDistance > 0)
         {
             return ReturnValues.Running;
         }
+        
         if (navMeshAgent.remainingDistance == 0)
         {
-            return ReturnValues.Succeed;
+            //anim.Play("Baile");
+            return ReturnValues.Failed;
         }
-        return ReturnValues.Succeed;
+        return ReturnValues.Failed;
     }
+    bool bailando = false;
     private void BailarAction()
     {
-        //print("Bailando");
+        anim.Play("Baile");
+        //transform.rotation = Quaternion.Euler(0, 90, 0);
     }
 
     private ReturnValues BailarSuccessCheck()

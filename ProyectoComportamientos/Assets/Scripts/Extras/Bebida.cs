@@ -11,6 +11,7 @@ public class Bebida: MonoBehaviour
     //lo q sea
     public BarmanController barman;
     public ClienteController cliente;
+    public CamareroController camarero;
     public Bebida(Vector3 pos)
     {
         posicionCliente = pos;

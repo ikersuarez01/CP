@@ -77,7 +77,7 @@ public class BarmanController : MonoBehaviour
                 FindObjectOfType<AudioManager>().Play("Campanita");
                 if (!objectSpawned)
                 {
-                    bocAux = Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    bocAux = Instantiate(bocadillo1, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
                 modeloBebida = Instantiate(bebida.modeloBebidas[bebida.tipo], new Vector3(this.transform.position.x, this.transform.position.y+0.88f, this.transform.position.z-1.5f), Quaternion.identity);
@@ -106,11 +106,14 @@ public class BarmanController : MonoBehaviour
                     Destroy(bocAux.gameObject);
                     objectSpawned = false;
                 }
-                for (var i = modeloBebida.transform.childCount - 1; i >= 0; i--)
+                if(modeloBebida != null)
                 {
-                    Object.Destroy(modeloBebida.transform.GetChild(i).gameObject);
+                    for (var i = modeloBebida.transform.childCount - 1; i >= 0; i--)
+                    {
+                        Destroy(modeloBebida.transform.GetChild(i).gameObject);
+                    }
+                    Destroy(modeloBebida);
                 }
-                Destroy(modeloBebida);
                 state = 0;
                 //Espera hasta que el camarero llegue para entregarle la bebida
                 BorrarBocadillos();

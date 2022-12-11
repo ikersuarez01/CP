@@ -41,8 +41,16 @@ public class ClienteController : MonoBehaviour
     private float timePuerta;
     private float timeMesa;
     private float t = 0f;
+    public BTBailarina bailarina;
+    [SerializeField] public GameObject[] modeloBasos;
+    public Animator anim;
     private void Start()
     {
+        modeloBasos[0].SetActive(false);
+        modeloBasos[1].SetActive(false);
+        modeloBasos[2].SetActive(false);
+        modeloBasos[3].SetActive(false);
+        anim = GetComponentInChildren<Animator>();
         t = 0f;
         timePuerta = 8f;
         timeMesa = 16f;
@@ -62,18 +70,28 @@ public class ClienteController : MonoBehaviour
         {
             //Se para pa mirar a la bailarina
             //si la bailarina va hacia él, para de hacer todo
+            transform.LookAt(bailarina.transform.position);
+            if (state == 4)
+            {
+                anim.Play("HablaConBebida");
+            }
+            else
+            {
+                anim.Play("HablaSinBebida");
+            }
             
         }
         else
         {
             switch(state){
                 case 0:
+                    anim.Play("Idle");
                     //Esperando mesa libre
                     t += Time.deltaTime / timePuerta;
                     if (t > 1)
                     {
                         t = 0;
-                        bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                         bocAux.GetComponent<BocadilloCamara>().client = this;
                         bocAux.GetComponent<BocadilloCamara>().movement = true;
                         worldController.numEPuerta++;
@@ -92,13 +110,16 @@ public class ClienteController : MonoBehaviour
                     }
                     break;
                 case 1:
+                    anim.Play("Walk");
                     //Movimiento hacia mesa
                     if (comprobatePos())
                     {
+                        transform.rotation = (Quaternion.Euler(0, 270, 0));
                         state = 2;
                     }
                     break;
                 case 2:
+                    anim.Play("Idle");
                     //Esperando camarero libre
                     if (!comprobatePos())
                     {
@@ -111,7 +132,7 @@ public class ClienteController : MonoBehaviour
                     {
                         //t = 0;
                         BorrarBocadillos();
-                        bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux = Instantiate(bocadilloEnfado, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                         bocAux.GetComponent<BocadilloCamara>().client = this;
                         bocAux.GetComponent<BocadilloCamara>().movement = true;
                         navMeshAgent.destination = puertaPos;
@@ -123,7 +144,7 @@ public class ClienteController : MonoBehaviour
                     //bocadillo esperando
                     if (!objectSpawned)
                     {
-                        bocAux = Instantiate(bocadilloEsperando, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux = Instantiate(bocadilloEsperando, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                         bocAux.GetComponent<BocadilloCamara>().client = this;
                         objectSpawned = true;
                     }
@@ -135,6 +156,11 @@ public class ClienteController : MonoBehaviour
                         camarero.destination = new Vector3(destination.x-1, destination.y, destination.z+1);
                         bebida.posicionCliente = new Vector3(destination.x-1, destination.y, destination.z+1);
                         bebida.cliente = this;
+                        modeloBasos[0].SetActive(false);
+                        modeloBasos[1].SetActive(false);
+                        modeloBasos[2].SetActive(false);
+                        modeloBasos[3].SetActive(false);
+                        modeloBasos[bebida.tipo].SetActive(true);
                         camarero.bebida = bebida;
                         camarero.state = 1;
                         state = 3;
@@ -142,24 +168,32 @@ public class ClienteController : MonoBehaviour
                     break;
                 case 3:
                     t = 0;
+                    if (endAnim)
+                    {
+                        anim.Play("Idle");
+                        transform.rotation = (Quaternion.Euler(0, 270, 0));
+                    }
                     //Esperando
                     break;
                 case 4:
                     //Animacion beber (si vuelve a pedir state = 2)
                     //bocadillo beber
+                    endAnim = false;
+                    anim.Play("Beber");
                     if (!objectSpawned)
                     {
-                        bocAux = Instantiate(bocadilloBebiendo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                        bocAux = Instantiate(bocadilloBebiendo, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                         objectSpawned = true;
                     }
                     if (!oneTime)
                     {
                         oneTime = true;
-                        modeloBebida = Instantiate(bebida.modeloBebidas[tipoBebida], new Vector3(mesa.transform.position.x+0.3f, mesa.transform.position.y+1.5f, mesa.transform.position.z), Quaternion.identity);
+                        //modeloBebida = Instantiate(bebida.modeloBebidas[tipoBebida], new Vector3(mesa.transform.position.x+0.3f, mesa.transform.position.y+1.5f, mesa.transform.position.z), Quaternion.identity);
                         StartCoroutine(WaitSeconds());
                     }
                     break;
                 case 5:
+                    anim.Play("Walk");
                     oneTime = false;
                     navMeshAgent.destination = puertaPos; // solo si se va del bar
                     if (mesaLibreFirstTime)
@@ -200,7 +234,7 @@ public class ClienteController : MonoBehaviour
             //bocadillo rechazar propina
             if (!objectSpawned)
             {
-                bocAux = Instantiate(bocadilloRechazarPropina, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                bocAux = Instantiate(bocadilloRechazarPropina, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                 objectSpawned = true;
             }
             StartCoroutine(WaitSeconds2());
@@ -211,7 +245,7 @@ public class ClienteController : MonoBehaviour
             //bocadillo dar propina
             if (!objectSpawned)
             {
-                bocAux = Instantiate(bocadilloAceptarPropina, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                bocAux = Instantiate(bocadilloAceptarPropina, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                 objectSpawned = true;
             }
             StartCoroutine(WaitSeconds2());
@@ -222,11 +256,11 @@ public class ClienteController : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         BorrarBocadillos();
-        for (var i = modeloBebida.transform.childCount - 1; i >= 0; i--)
+        /*for (var i = modeloBebida.transform.childCount - 1; i >= 0; i--)
         {
             Object.Destroy(modeloBebida.transform.GetChild(i).gameObject);
         }
-        Destroy(modeloBebida);
+        Destroy(modeloBebida);*/
         if (borracho)
         {
             int p = Random.Range(0, 100);
@@ -261,9 +295,13 @@ public class ClienteController : MonoBehaviour
             objectSpawned = false;
         }
     }
+    public bool endAnim = false;
     public void BocadillosBebida()
     {
+        anim.Play("HablaSinBebida");
+        transform.LookAt(bebida.camarero.transform.position);
         StartCoroutine(ShowBebidaChosen());
+        
     }
     IEnumerator ShowBebidaChosen()
     {
@@ -273,28 +311,28 @@ public class ClienteController : MonoBehaviour
             case 0:
                 if (!objectSpawned)
                 {
-                    bocAux = Instantiate(bocadilloBebidaAmarillo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    bocAux = Instantiate(bocadilloBebidaAmarillo, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
                 break;
             case 1:
                 if (!objectSpawned)
                 {
-                    bocAux = Instantiate(bocadilloBebidaAzul, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    bocAux = Instantiate(bocadilloBebidaAzul, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
                 break;
             case 2:
                 if (!objectSpawned)
                 {
-                    bocAux = Instantiate(bocadilloBebidaRojo, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    bocAux = Instantiate(bocadilloBebidaRojo, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
                 break;
             case 3:
                 if (!objectSpawned)
                 {
-                    bocAux = Instantiate(bocadilloBebidaVerde, new Vector3(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z), Quaternion.identity);
+                    bocAux = Instantiate(bocadilloBebidaVerde, new Vector3(this.transform.position.x, this.transform.position.y + 3, this.transform.position.z), Quaternion.identity);
                     objectSpawned = true;
                 }
                 break;
@@ -302,7 +340,7 @@ public class ClienteController : MonoBehaviour
         camarero.BorrarBocadillos();
         yield return new WaitForSeconds(2);
         BorrarBocadillos();
-
+        endAnim = true;
         camarero.state = 3;
     }
     

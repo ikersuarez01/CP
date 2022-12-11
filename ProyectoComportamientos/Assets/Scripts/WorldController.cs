@@ -13,9 +13,9 @@ public class WorldController : MonoBehaviour
     [SerializeField] public List<ClienteController> listaClientes;
     [SerializeField] public List<Bebida> listaBebidasEnEspera;
 
-    [SerializeField] private GameObject prefabCamarero;
+    [SerializeField] private GameObject[] prefabCamarero;
     [SerializeField] private GameObject prefabBarman;
-    [SerializeField] private GameObject prefabCliente;
+    [SerializeField] private GameObject[] prefabCliente;
 
     [SerializeField] private GameObject parentCamarero;
     [SerializeField] private GameObject parentBarman;
@@ -74,22 +74,29 @@ public class WorldController : MonoBehaviour
     public void addCLient()
     {
         float aux = UnityEngine.Random.Range(0f, 100f);
+        GameObject obj;
         if (aux < 60)
         {
             //cliente normal
+            obj = Instantiate(prefabCliente[UnityEngine.Random.Range(0,3)], parentCliente.transform.position, parentCliente.transform.rotation);
         }
         else if (aux < 80)
         {
             //cliente exigente
-        }else
+            obj = Instantiate(prefabCliente[3], parentCliente.transform.position, parentCliente.transform.rotation);
+            obj.GetComponent<ClienteController>().exigente = true;
+        }
+        else
         {
             //cliente borracho
+            obj = Instantiate(prefabCliente[4], parentCliente.transform.position, parentCliente.transform.rotation);
+            obj.GetComponent<ClienteController>().borracho = true;
         }
 
-        GameObject obj = Instantiate(prefabCliente, parentCliente.transform.position, parentCliente.transform.rotation);
         obj.transform.SetParent(parentCliente.transform);
         obj.GetComponent<ClienteController>().puertaPos = new Vector3(puertaPos.transform.position.x+0.2f*UnityEngine.Random.Range(0f,40f), puertaPos.transform.position.y, + puertaPos.transform.position.z+0.2f* UnityEngine.Random.Range(0f, 40f));
         obj.GetComponent<ClienteController>().worldController = this;
+        obj.GetComponent<ClienteController>().bailarina = bailarina.GetComponent<BTBailarina>();
         listaClientes.Add(obj.GetComponent<ClienteController>());
     }
     public void removeConcreteClient(ClienteController aux)
@@ -116,7 +123,7 @@ public class WorldController : MonoBehaviour
         {
             return;
         }
-        GameObject obj = Instantiate(prefabCamarero, new Vector3(parentCamarero.transform.position.x + 1 * listaCamareros.Count, parentCamarero.transform.position.y, parentCamarero.transform.position.z), parentCamarero.transform.rotation);
+        GameObject obj = Instantiate(prefabCamarero[UnityEngine.Random.Range(0,4)], new Vector3(parentCamarero.transform.position.x + 1 * listaCamareros.Count, parentCamarero.transform.position.y, parentCamarero.transform.position.z), Quaternion.Euler(0,180,0));
         obj.transform.SetParent(parentCamarero.transform);
         obj.GetComponent<CamareroController>().navMeshAgent = obj.GetComponent<NavMeshAgent>();
         obj.GetComponent<CamareroController>().worldController = this;
